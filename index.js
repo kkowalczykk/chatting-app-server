@@ -13,6 +13,7 @@ const io = socketio(server);
 io.on('connection', (socket) => {
       socket.on('join', ({ name, room }) => {
             const user = addUser({ id: socket.id, name, room });
+            if (!user.id) socket.emit('userExists');
             socket.emit('message', { user: 'admin', text: `Hello ${user.name}.` })
             socket.broadcast.to(user.room).emit('message', { user: 'admin', text: `${user.name} joined.` })
 
